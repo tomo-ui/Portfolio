@@ -110,9 +110,9 @@ const PRICING = {
 // możesz użyć plików z /images/full lub wgrać nowe do tego folderu.
 // Jeśli chcesz PRAWDZIWY, samoaktualizujący się feed — zobacz README.md.
 const INSTAGRAM_PREVIEW = [
-  { image: "images/insta/1.jpg", caption: "KTW" },
-  { image: "images/insta/2.jpg", caption: "ATAL" },
-  { image: "images/insta/3.jpg", caption: "SPODEK" }
+  { image: "images/insta/1.JPG", caption: "KTW" },
+  { image: "images/insta/2.JPG", caption: "ATAL" },
+  { image: "images/insta/3.JPG", caption: "SPODEK" }
 ];
 
 // ---- OPINIE — automatycznie przewijany pasek opinii ------------------------
