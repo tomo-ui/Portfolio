@@ -277,7 +277,47 @@
   /* ---------------- PRICING ---------------- */
   const pricingGrid = document.getElementById("pricingGrid");
   const pricingTabs = document.querySelectorAll(".pricing__tab");
+  const packageSelect = document.getElementById("package");
   let activeGroup = "foto";
+
+  function packageOptionValue(pkg) {
+    return `${pkg.name} (${pkg.price})`;
+  }
+
+  // Generuje listę pakietów w formularzu kontaktowym na podstawie PRICING —
+  // dzięki temu zmiana cen/pakietów w js/data.js automatycznie aktualizuje formularz.
+  function buildPackageOptions() {
+    packageSelect.innerHTML = "";
+
+    const groupFoto = document.createElement("optgroup");
+    groupFoto.label = "Sesje zdjęciowe";
+    PRICING.foto.forEach((pkg) => {
+      const opt = document.createElement("option");
+      opt.value = packageOptionValue(pkg);
+      opt.textContent = `${pkg.name} — ${pkg.price}`;
+      groupFoto.appendChild(opt);
+    });
+    packageSelect.appendChild(groupFoto);
+
+    const groupGrafika = document.createElement("optgroup");
+    groupGrafika.label = "Grafika i branding";
+    PRICING.grafika.forEach((pkg) => {
+      const opt = document.createElement("option");
+      opt.value = packageOptionValue(pkg);
+      opt.textContent = `${pkg.name} — ${pkg.price}`;
+      groupGrafika.appendChild(opt);
+    });
+    packageSelect.appendChild(groupGrafika);
+
+    ["Plan zdjęciowy / teledysk", "Jeszcze nie wiem / inne"].forEach((label) => {
+      const opt = document.createElement("option");
+      opt.value = label;
+      opt.textContent = label;
+      packageSelect.appendChild(opt);
+    });
+  }
+
+  buildPackageOptions();
 
   function renderPricing() {
     pricingGrid.innerHTML = "";
@@ -293,9 +333,16 @@
         <ul class="price-card__features">
           ${pkg.features.map((f) => `<li>${f}</li>`).join("")}
         </ul>
-        <a href="#kontakt" class="btn ${pkg.featured ? "btn--primary" : "btn--ghost"} btn--full">Zapytaj o termin</a>
+        <a href="#kontakt" class="btn ${pkg.featured ? "btn--primary" : "btn--ghost"} btn--full" data-package="${packageOptionValue(pkg)}">Zapytaj o termin</a>
       `;
       pricingGrid.appendChild(card);
+    });
+
+    // Klik w "Zapytaj o termin" na karcie od razu ustawia ten pakiet w formularzu kontaktowym
+    pricingGrid.querySelectorAll("[data-package]").forEach((link) => {
+      link.addEventListener("click", () => {
+        packageSelect.value = link.dataset.package;
+      });
     });
   }
 
