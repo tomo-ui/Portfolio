@@ -48,6 +48,7 @@ const PRICING = {
       features: [
         "do 4 godzin zdjęciowych",
         "Nielimitowane lokalizacje do 30 km",
+        "Konsultacja stylizacji i pomysłu",
         "30 zdjęć w obróbce kolorystycznej",
         "Krótki materiał BTS (behind the scenes)",
         "Priorytetowy czas realizacji (5 dni)",
