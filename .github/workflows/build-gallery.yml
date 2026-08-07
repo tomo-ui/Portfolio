@@ -28,7 +28,7 @@ jobs:
           python-version: "3.11"
 
       - name: Zainstaluj zależności
-        run: pip install pillow
+        run: pip install pillow pillow-heif
 
       - name: Zbuduj galerię (konwersja zdjęć + gallery-data.js)
         run: python3 tools/build_gallery.py

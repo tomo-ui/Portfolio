@@ -39,7 +39,15 @@ LABELS_JSON_PATH = os.path.join(ROOT, "tools", "category-labels.json")
 GALLERY_JS_PATH = os.path.join(ROOT, "js", "gallery-data.js")
 LABELS_JS_PATH = os.path.join(ROOT, "js", "category-labels.js")
 
-VALID_EXT = (".jpg", ".jpeg", ".png", ".webp")
+VALID_EXT = (".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif", ".tif", ".tiff", ".bmp")
+IGNORED_EXT_HINTS = (".cr2", ".nef", ".arw", ".dng", ".raf", ".orf", ".rw2")  # RAW z aparatu — nieobsługiwane
+
+try:
+    import pillow_heif
+    pillow_heif.register_heif_opener()
+    HEIF_OK = True
+except ImportError:
+    HEIF_OK = False
 FULL_MAX_W = 1600
 THUMB_MAX_W = 700
 
@@ -115,10 +123,20 @@ def main():
 
     for cat in categories:
         cat_dir = os.path.join(SRC_DIR, cat)
-        files = sorted([
-            f for f in os.listdir(cat_dir)
-            if f.lower().endswith(VALID_EXT)
-        ])
+        all_files = sorted(os.listdir(cat_dir))
+        files = [f for f in all_files if f.lower().endswith(VALID_EXT)]
+
+        # ostrzeżenie o plikach, których nie da się przetworzyć (RAW z aparatu, itp.)
+        # — bez tego taki plik znikał bez śladu i wyglądało to, jakby "nic się nie działo"
+        for f in all_files:
+            fl = f.lower()
+            if fl.startswith("."):
+                continue
+            if fl.endswith(IGNORED_EXT_HINTS):
+                print(f"POMINIĘTO (format RAW z aparatu, nieobsługiwany): {cat}/{f} "
+                      f"— wyeksportuj jako JPG/PNG/HEIC i wrzuć ponownie.")
+            elif not fl.endswith(VALID_EXT):
+                print(f"POMINIĘTO (nieznany/nieobsługiwany format): {cat}/{f}")
 
         # nowa kategoria -> dopisz do labels.json z domyślną nazwą
         if cat not in labels["labels"]:
