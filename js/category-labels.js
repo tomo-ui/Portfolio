@@ -9,7 +9,8 @@ const CATEGORY_META = {
     "koncerty",
     "grafika",
     "Zając",
-    "Kato Warp"
+    "Kato Warp",
+    "Kato_Warp"
   ],
   "labels": {
     "modelki": "Modelki",
@@ -19,6 +20,7 @@ const CATEGORY_META = {
     "koncerty": "Koncerty",
     "grafika": "Grafika",
     "Zając": "Zając",
-    "Kato Warp": "Kato warp"
+    "Kato Warp": "Kato warp",
+    "Kato_Warp": "Kato Warp"
   }
 };
