@@ -87,7 +87,7 @@
     activeLayer = 1 - activeLayer;
   }
 
-  setInterval(nextSlide, 10000);
+  setInterval(nextSlide, 9999);
 })();
   
 
