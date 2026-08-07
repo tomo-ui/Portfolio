@@ -1259,5 +1259,165 @@ const GALLERY = [
     "thumb": "images/thumb/grafika/grafika-051.webp",
     "w": 1600,
     "h": 1600
+  },
+  {
+    "id": "Zając-DSC_0432",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0432.webp",
+    "thumb": "images/thumb/Zając/DSC_0432.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0434",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0434.webp",
+    "thumb": "images/thumb/Zając/DSC_0434.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0436",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0436.webp",
+    "thumb": "images/thumb/Zając/DSC_0436.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0438",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0438.webp",
+    "thumb": "images/thumb/Zając/DSC_0438.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0439",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0439.webp",
+    "thumb": "images/thumb/Zając/DSC_0439.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0444",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0444.webp",
+    "thumb": "images/thumb/Zając/DSC_0444.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0467",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0467.webp",
+    "thumb": "images/thumb/Zając/DSC_0467.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0473",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0473.webp",
+    "thumb": "images/thumb/Zając/DSC_0473.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0474",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0474.webp",
+    "thumb": "images/thumb/Zając/DSC_0474.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0478",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0478.webp",
+    "thumb": "images/thumb/Zając/DSC_0478.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0485",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0485.webp",
+    "thumb": "images/thumb/Zając/DSC_0485.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0486",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0486.webp",
+    "thumb": "images/thumb/Zając/DSC_0486.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0487",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0487.webp",
+    "thumb": "images/thumb/Zając/DSC_0487.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0498",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0498.webp",
+    "thumb": "images/thumb/Zając/DSC_0498.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0501",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0501.webp",
+    "thumb": "images/thumb/Zając/DSC_0501.webp",
+    "w": 3072,
+    "h": 4608
+  },
+  {
+    "id": "Zając-DSC_0504",
+    "category": "Zając",
+    "categoryLabel": "Zając",
+    "project": "Zając",
+    "full": "images/full/Zając/DSC_0504.webp",
+    "thumb": "images/thumb/Zając/DSC_0504.webp",
+    "w": 3072,
+    "h": 4608
   }
 ];
