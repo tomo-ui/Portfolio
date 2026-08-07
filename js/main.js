@@ -51,7 +51,7 @@
   */
   
   (function heroSlideshow() {
-    const heroModelki = GALLERY.filter((item) => item.category === "modelki").map((item) => item.full);
+    const heroModelki = GALLERY.filter((item) => item.category === "").map((item) => item.slideshow);
     if (heroModelki.length < 2) return;
 
     const startSrc = heroLayers[0].getAttribute("src");
