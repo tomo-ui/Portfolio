@@ -49,7 +49,7 @@
      Żeby przywrócić automatyczną zmianę zdjęć hero co 5 sekund (tylko z kategorii "modelki"),
      usuń komentarz z bloku poniżej.
   */
-  
+  /*
   (function heroSlideshow() {
   const SLIDESHOW_COUNT = 8; // ← ustaw ile masz zdjęć
   const heroModelki = Array.from({ length: SLIDESHOW_COUNT }, (_, i) => 
@@ -87,10 +87,10 @@
     activeLayer = 1 - activeLayer;
   }
 
-  setInterval(nextSlide, 9999);
+  setInterval(nextSlide, 10000);
 })();
   
-
+*/
   burger.addEventListener("click", () => {
     const open = mobileMenu.classList.toggle("is-open");
     burger.setAttribute("aria-expanded", String(open));
