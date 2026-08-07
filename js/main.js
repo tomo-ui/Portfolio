@@ -34,6 +34,7 @@
       aboutFlip.classList.toggle("about__flip--photo");
     });
   }
+  
   if (aboutFlip && aboutSection) {
     // Auto-odwracanie: zdjęcie pokazuje się, gdy sekcja "O mnie" jest w widoku,
     // i wraca do logo, gdy użytkownik z niej wyjedzie (przewinie dalej lub cofnie).
@@ -43,7 +44,7 @@
           aboutFlip.classList.toggle("about__flip--photo", entry.isIntersecting);
         });
       },
-      { threshold: 0.4 }
+      { threshold: 0.52 }
     );
     aboutIO.observe(aboutSection);
   }
