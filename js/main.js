@@ -53,7 +53,7 @@
   (function heroSlideshow() {
   const SLIDESHOW_COUNT = 8; // ← ustaw ile masz zdjęć
   const heroModelki = Array.from({ length: SLIDESHOW_COUNT }, (_, i) => 
-    `/images/slideshow/slideshow_${i + 1}.png`
+    `/images/slideshow/slideshow_${i + 1}.PNG`
   );
 
   if (heroModelki.length < 2) return;
