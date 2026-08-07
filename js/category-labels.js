@@ -7,7 +7,8 @@ const CATEGORY_META = {
     "chlodnonam",
     "jwp",
     "koncerty",
-    "grafika"
+    "grafika",
+    "Zając"
   ],
   "labels": {
     "modelki": "Modelki",
@@ -15,6 +16,7 @@ const CATEGORY_META = {
     "chlodnonam": "Chłodnonam",
     "jwp": "JWP Sydoz Łajzol",
     "koncerty": "Koncerty",
-    "grafika": "Grafika"
+    "grafika": "Grafika",
+    "Zając": "Zając"
   }
 };

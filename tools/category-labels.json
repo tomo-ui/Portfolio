@@ -5,7 +5,8 @@
     "chlodnonam",
     "jwp",
     "koncerty",
-    "grafika"
+    "grafika",
+    "Zając"
   ],
   "labels": {
     "modelki": "Modelki",
@@ -13,6 +14,7 @@
     "chlodnonam": "Chłodnonam",
     "jwp": "JWP Sydoz Łajzol",
     "koncerty": "Koncerty",
-    "grafika": "Grafika"
+    "grafika": "Grafika",
+    "Zając": "Zając"
   }
 }
