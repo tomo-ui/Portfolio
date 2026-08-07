@@ -1,0 +1,18 @@
+{
+  "order": [
+    "modelki",
+    "markiza",
+    "chlodnonam",
+    "jwp",
+    "koncerty",
+    "grafika"
+  ],
+  "labels": {
+    "modelki": "Modelki",
+    "markiza": "Markiza",
+    "chlodnonam": "Chłodnonam",
+    "jwp": "JWP Sydoz Łajzol",
+    "koncerty": "Koncerty",
+    "grafika": "Grafika"
+  }
+}
