@@ -51,40 +51,44 @@
   */
   
   (function heroSlideshow() {
-    const heroModelki = GALLERY.filter((item) => item.category === "").map((item) => item.modelki);
-    if (heroModelki.length < 2) return;
+  const SLIDESHOW_COUNT = 8; // ← ustaw ile masz zdjęć
+  const heroModelki = Array.from({ length: SLIDESHOW_COUNT }, (_, i) => 
+    `/images/slideshow/slideshow_${i + 1}.png`
+  );
 
-    const startSrc = heroLayers[0].getAttribute("src");
-    let startIndex = heroModelki.findIndex((src) => src === startSrc);
-    if (startIndex === -1) startIndex = 0;
+  if (heroModelki.length < 2) return;
 
-    let activeLayer = 0;
-    const ordered = heroModelki.slice(startIndex).concat(heroModelki.slice(0, startIndex));
-    let pos = 0;
+  const startSrc = heroLayers[0].getAttribute("src");
+  let startIndex = heroModelki.findIndex((src) => src === startSrc);
+  if (startIndex === -1) startIndex = 0;
 
-    function preload(src) {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => resolve();
-        img.onerror = () => resolve();
-        img.src = src;
-      });
-    }
+  let activeLayer = 0;
+  const ordered = heroModelki.slice(startIndex).concat(heroModelki.slice(0, startIndex));
+  let pos = 0;
 
-    async function nextSlide() {
-      pos = (pos + 1) % ordered.length;
-      const nextSrc = ordered[pos];
-      const inactiveLayer = heroLayers[1 - activeLayer];
-      await preload(nextSrc);
-      inactiveLayer.setAttribute("src", nextSrc);
-      void inactiveLayer.offsetWidth;
-      heroLayers[activeLayer].classList.remove("is-active");
-      inactiveLayer.classList.add("is-active");
-      activeLayer = 1 - activeLayer;
-    }
+  function preload(src) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve();
+      img.onerror = () => resolve();
+      img.src = src;
+    });
+  }
 
-    setInterval(nextSlide, 10000);
-  })();
+  async function nextSlide() {
+    pos = (pos + 1) % ordered.length;
+    const nextSrc = ordered[pos];
+    const inactiveLayer = heroLayers[1 - activeLayer];
+    await preload(nextSrc);
+    inactiveLayer.setAttribute("src", nextSrc);
+    void inactiveLayer.offsetWidth;
+    heroLayers[activeLayer].classList.remove("is-active");
+    inactiveLayer.classList.add("is-active");
+    activeLayer = 1 - activeLayer;
+  }
+
+  setInterval(nextSlide, 10000);
+})();
   
 
   burger.addEventListener("click", () => {
