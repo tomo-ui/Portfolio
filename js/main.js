@@ -7,13 +7,45 @@
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
+  /* ---------------- SCROLL REVEAL (helper, używany też przez dynamiczne sekcje) ---------------- */
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+  );
+  function observeReveal(el) {
+    el.classList.add("reveal");
+    io.observe(el);
+  }
+
   /* ---------------- ABOUT PHOTO FLIP CARD ---------------- */
   const aboutFlip = document.getElementById("aboutFlip");
+  const aboutSection = document.getElementById("o-mnie");
   if (aboutFlip) {
+    // Klik/tap — ręczne przełączenie (przydatne na telefonie, dodatkowo do auto-scrolla)
     aboutFlip.addEventListener("click", (e) => {
       e.preventDefault();
-      aboutFlip.classList.toggle("is-flipped");
+      aboutFlip.classList.toggle("about__flip--photo");
     });
+  }
+  if (aboutFlip && aboutSection) {
+    // Auto-odwracanie: zdjęcie pokazuje się, gdy sekcja "O mnie" jest w widoku,
+    // i wraca do logo, gdy użytkownik z niej wyjedzie (przewinie dalej lub cofnie).
+    const aboutIO = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          aboutFlip.classList.toggle("about__flip--photo", entry.isIntersecting);
+        });
+      },
+      { threshold: 0.4 }
+    );
+    aboutIO.observe(aboutSection);
   }
 
   /* ---------------- NAV: scroll state + mobile menu ---------------- */
@@ -175,9 +207,7 @@
       btn.addEventListener("click", () => openLightbox(Number(btn.dataset.index)));
     });
 
-    document.querySelectorAll(".gallery__item").forEach((el) => {
-      el.classList.add("reveal", "is-visible");
-    });
+    galleryEl.querySelectorAll(".gallery__item").forEach(observeReveal);
   }
 
   // Delegacja zdarzeń — działa też dla zakładek dodanych dynamicznie przez buildFilterTabs()
@@ -258,6 +288,7 @@
       </span>
     `;
     igGrid.appendChild(div);
+    observeReveal(div);
   });
 
   /* ---------------- TESTIMONIALS (auto-rotating, fade + slide) ---------------- */
@@ -375,6 +406,7 @@
         <a href="#kontakt" class="btn ${pkg.featured ? "btn--primary" : "btn--ghost"} btn--full" data-package="${packageOptionValue(pkg)}">Zapytaj o termin</a>
       `;
       pricingGrid.appendChild(card);
+      observeReveal(card);
     });
 
     // Klik w "Zapytaj o termin" na karcie od razu ustawia ten pakiet w formularzu kontaktowym
@@ -449,23 +481,8 @@
     }
   });
 
-  /* ---------------- SCROLL REVEAL ---------------- */
-  const revealTargets = document.querySelectorAll(
-    ".section__head, .about__frame, .about__text, .gallery__item, .price-card, .contact__form, .contact__side, .ig-tile"
-  );
-  const io = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          io.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-  );
-  revealTargets.forEach((el) => {
-    el.classList.add("reveal");
-    io.observe(el);
-  });
+  /* ---------------- SCROLL REVEAL: statyczne sekcje (dynamiczne rejestrują się same przy tworzeniu) ---------------- */
+  document
+    .querySelectorAll(".section__head, .about__frame, .about__text, .contact__form, .contact__side")
+    .forEach(observeReveal);
 })();
