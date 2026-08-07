@@ -34,7 +34,7 @@ const PRICING = {
       features: [
         "do 2 godzin sesji",
         "3 lokalizacje",
-        "15 zdjęć w obróbce kolorystycznej",
+        "10 zdjęć w obróbce kolorystycznej",
         "Konsultacja stylizacji i pomysłu",
         "Pliki na Google Drive przez 30 dni"
       ],
@@ -51,7 +51,7 @@ const PRICING = {
         "30 zdjęć w obróbce kolorystycznej",
         "Krótki materiał BTS (behind the scenes)",
         "Priorytetowy czas realizacji (5 dni)",
-        "Unikatowy Link do Google Drive na zawsze"
+        "Unikatowy Link do Google Drive na 3 mies."
         
       ],
       featured: false
