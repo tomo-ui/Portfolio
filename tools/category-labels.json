@@ -1,11 +1,20 @@
 {
-  "order": ["modelki", "markiza", "chlodnonam", "jwp", "koncerty", "grafika"],
+  "order": [
+    "modelki",
+    "markiza",
+    "chlodnonam",
+    "jwp",
+    "koncerty",
+    "grafika",
+    "KATO_WARP"
+  ],
   "labels": {
     "modelki": "Modelki",
     "markiza": "Markiza",
     "chlodnonam": "Chłodnonam",
     "jwp": "JWP Sydoz Łajzol",
     "koncerty": "Koncerty",
-    "grafika": "Grafika"
+    "grafika": "Grafika",
+    "KATO_WARP": "Kato Warp"
   }
 }

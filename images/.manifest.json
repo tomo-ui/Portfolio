@@ -1,0 +1,47 @@
+{
+  "KATO_WARP/warp1.jpg": {
+    "hash": "6e764cc75d8aa09d9cc85848e0b5e5c5",
+    "w": 3072,
+    "h": 4608
+  },
+  "KATO_WARP/warp2.jpg": {
+    "hash": "ed1f00e81c0fe1c89e90fc407410ed35",
+    "w": 3072,
+    "h": 4608
+  },
+  "KATO_WARP/warp3.jpg": {
+    "hash": "b9a93e99fc8f3cbe2425ef353d038378",
+    "w": 3072,
+    "h": 4608
+  },
+  "KATO_WARP/warp4.jpg": {
+    "hash": "6bb932bc1ba0b29c9c7ad1b87c4eb520",
+    "w": 3072,
+    "h": 4608
+  },
+  "KATO_WARP/warp5.jpg": {
+    "hash": "c0900517da8fd22a4d7f9618b083b1c7",
+    "w": 3072,
+    "h": 4608
+  },
+  "KATO_WARP/warp6.jpg": {
+    "hash": "2f55ba3a82c98f05901fdc573da50be3",
+    "w": 3072,
+    "h": 4608
+  },
+  "KATO_WARP/warp7.jpg": {
+    "hash": "f58ee38406d8ea99873b4979a74b8cb0",
+    "w": 3072,
+    "h": 4608
+  },
+  "KATO_WARP/warp8.jpg": {
+    "hash": "60369b71dbc66b4599e10a4d4374f8fb",
+    "w": 3072,
+    "h": 4608
+  },
+  "KATO_WARP/warp9.jpg": {
+    "hash": "ddb11af536a1f48b39366eac1abdad14",
+    "w": 3072,
+    "h": 4608
+  }
+}
