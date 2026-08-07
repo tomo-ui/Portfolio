@@ -1,7 +1,14 @@
 // Plik generowany automatycznie przez tools/build_gallery.py — nie edytuj ręcznie.
 // Nazwy zakładek zmieniaj w tools/category-labels.json (to on jest źródłem prawdy).
 const CATEGORY_META = {
-  "order": ["modelki", "markiza", "chlodnonam", "jwp", "koncerty", "grafika"],
+  "order": [
+    "modelki",
+    "markiza",
+    "chlodnonam",
+    "jwp",
+    "koncerty",
+    "grafika"
+  ],
   "labels": {
     "modelki": "Modelki",
     "markiza": "Markiza",

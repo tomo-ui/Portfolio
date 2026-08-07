@@ -74,18 +74,24 @@ def convert(src_path, full_out, thumb_out):
     im = Image.open(src_path).convert("RGB")
     w, h = im.size
 
+    # Pełna wersja
     full = im.copy()
     if full.width > FULL_MAX_W:
         r = FULL_MAX_W / full.width
         full = full.resize((FULL_MAX_W, int(full.height * r)), Image.LANCZOS)
-    os.makedirs(os.path.dirname(full_out), exist_ok=True)
+
+    full_dir = os.path.dirname(full_out)
+    os.makedirs(full_dir, exist_ok=True)
     full.save(full_out, "WEBP", quality=80, method=6)
 
+    # Miniatura
     thumb = im.copy()
     if thumb.width > THUMB_MAX_W:
         r = THUMB_MAX_W / thumb.width
         thumb = thumb.resize((THUMB_MAX_W, int(thumb.height * r)), Image.LANCZOS)
-    os.makedirs(os.path.dirname(thumb_out), exist_ok=True)
+
+    thumb_dir = os.path.dirname(thumb_out)
+    os.makedirs(thumb_dir, exist_ok=True)
     thumb.save(thumb_out, "WEBP", quality=74, method=6)
 
     return w, h

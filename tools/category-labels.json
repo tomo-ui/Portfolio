@@ -1,5 +1,12 @@
 {
-  "order": ["modelki", "markiza", "chlodnonam", "jwp", "koncerty", "grafika"],
+  "order": [
+    "modelki",
+    "markiza",
+    "chlodnonam",
+    "jwp",
+    "koncerty",
+    "grafika"
+  ],
   "labels": {
     "modelki": "Modelki",
     "markiza": "Markiza",
