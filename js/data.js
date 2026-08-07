@@ -15,7 +15,7 @@ const PRICING = {
   foto: [
     {
       name: "Mini",
-      price: "250 zł",
+      price: "420 zł",
       unit: "/ sesja",
       desc: "Krótka sesja portretowa w jednej lokalizacji — idealna na aktualizację social mediów.",
       features: [
@@ -28,34 +28,34 @@ const PRICING = {
     },
     {
       name: "Standard",
-      price: "450 zł",
+      price: "890 zł",
       unit: "/ sesja",
       desc: "Najczęściej wybierany pakiet — więcej czasu, więcej ujęć i pełny grading.",
       features: [
         "do 2 godzin sesji",
-        "3 lokalizacje",
-        "10 zdjęć w obróbce kolorystycznej",
-        "Konsultacja stylizacji i pomysłu",
+        "2 lokalizacje",
+        "12 zdjęć w obróbce kolorystycznej",
+        "Podstawowa konsultacja stylizacji",
         "Pliki na Google Drive przez 30 dni"
       ],
-      featured: true
+      featured: false
     },
     {
       name: "Premium",
-      price: "950 zł",
+      price: "1190 zł",
       unit: "/ dzień",
       desc: "Pełen dzień kreatywny — na plan teledysku, lookbook lub większą produkcję.",
       features: [
-        "do 4 godzin zdjęciowych",
+        "do 4-5 godzin zdjęciowych",
         "Nielimitowane lokalizacje do 30 km",
-        "Konsultacja stylizacji i pomysłu",
-        "20 zdjęć w obróbce kolorystycznej",
+        "35-40 zdjęć w obróbce kolorystycznej",
         "Krótki materiał BTS (behind the scenes)",
-        "Priorytetowy czas realizacji (5 dni)",
-        "Unikatowy Link do Google Drive na 3 mies."
+        "Priorytetowa realizacja (max 5 dni)",
+        "Unikatowy Link do Google Drive na 3 mies.",
+        "Konsultacja stylizacji + moodboard + wsparcie koncepcyjne"
         
       ],
-      featured: false
+      featured: true
     }
   ],
   grafika: [

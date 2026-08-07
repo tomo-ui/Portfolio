@@ -326,7 +326,7 @@
       card.className = "price-card" + (pkg.featured ? " price-card--featured" : "");
       card.style.transitionDelay = `${i * 90}ms`;
       card.innerHTML = `
-        ${pkg.featured ? '<span class="price-card__badge">Polecane</span>' : ""}
+        ${pkg.featured ? '<span class="price-card__badge">Najczęściej wybierane</span>' : ""}
         <h3 class="price-card__name">${pkg.name}</h3>
         <p class="price-card__price">${pkg.price} <span>${pkg.unit}</span></p>
         <p class="price-card__desc">${pkg.desc}</p>
