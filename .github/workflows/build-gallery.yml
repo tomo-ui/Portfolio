@@ -1,0 +1,41 @@
+name: Aktualizacja galerii zdjęć
+
+# Uruchamia się automatycznie za każdym razem, gdy ktoś doda/zmieni/usunie
+# pliki w images/source/ (czyli tam, gdzie wrzucasz nowe zdjęcia) albo
+# poprawi nazwy zakładek w tools/category-labels.json.
+# Można też odpalić ręcznie z zakładki "Actions" na GitHubie (workflow_dispatch).
+on:
+  push:
+    paths:
+      - "images/source/**"
+      - "tools/category-labels.json"
+      - "tools/build_gallery.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-gallery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz repozytorium
+        uses: actions/checkout@v4
+
+      - name: Ustaw Pythona
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Zainstaluj zależności
+        run: pip install pillow
+
+      - name: Zbuduj galerię (konwersja zdjęć + gallery-data.js)
+        run: python3 tools/build_gallery.py
+
+      - name: Zapisz zmiany z powrotem do repozytorium
+        run: |
+          git config user.name "gallery-bot"
+          git config user.email "gallery-bot@users.noreply.github.com"
+          git add images/full images/thumb images/.manifest.json js/gallery-data.js js/category-labels.js tools/category-labels.json
+          git diff --cached --quiet && echo "Brak zmian w galerii." || (git commit -m "Auto: aktualizacja galerii zdjęć" && git push)

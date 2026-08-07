@@ -7,6 +7,15 @@
 
   document.getElementById("year").textContent = new Date().getFullYear();
 
+  /* ---------------- ABOUT PHOTO FLIP CARD ---------------- */
+  const aboutFlip = document.getElementById("aboutFlip");
+  if (aboutFlip) {
+    aboutFlip.addEventListener("click", (e) => {
+      e.preventDefault();
+      aboutFlip.classList.toggle("is-flipped");
+    });
+  }
+
   /* ---------------- NAV: scroll state + mobile menu ---------------- */
   const nav = document.getElementById("nav");
   const burger = document.getElementById("burger");
@@ -14,7 +23,6 @@
 
   const scrollProgress = document.getElementById("scrollProgress");
   const heroLayers = [document.getElementById("heroImgA"), document.getElementById("heroImgB")];
-  const heroSection = document.querySelector(".hero");
   let ticking = false;
 
   function onScroll() {
@@ -25,15 +33,6 @@
     const progress = docHeight > 0 ? (y / docHeight) * 100 : 0;
     scrollProgress.style.width = progress + "%";
 
-    if (heroSection) {
-      const heroHeight = heroSection.offsetHeight;
-      if (y < heroHeight) {
-        const parallax = y * 0.35;
-        heroLayers.forEach((el) => {
-          if (el) el.style.transform = `scale(1.06) translateY(${parallax}px)`;
-        });
-      }
-    }
     ticking = false;
   }
 
@@ -91,6 +90,9 @@
     const open = mobileMenu.classList.toggle("is-open");
     burger.setAttribute("aria-expanded", String(open));
     burger.classList.toggle("is-open", open);
+    // panel ma wyglądać jak przedłużenie paska nav — wymuś ten sam "szklany" wygląd
+    nav.classList.toggle("nav--menu-open", open);
+    document.body.classList.toggle("no-scroll", open);
   });
 
   mobileMenu.querySelectorAll("a").forEach((a) =>
@@ -98,14 +100,46 @@
       mobileMenu.classList.remove("is-open");
       burger.classList.remove("is-open");
       burger.setAttribute("aria-expanded", "false");
+      nav.classList.remove("nav--menu-open");
+      document.body.classList.remove("no-scroll");
     })
   );
 
   /* ---------------- GALLERY ---------------- */
   const galleryEl = document.getElementById("gallery");
-  const filters = document.querySelectorAll(".filter");
+  const filtersEl = document.getElementById("filters");
   let activeFilter = "all";
   let visibleItems = [];
+
+  function categoryLabelFor(cat) {
+    return (typeof CATEGORY_META !== "undefined" && CATEGORY_META.labels[cat]) || cat;
+  }
+
+  // Buduje zakładki filtrów na podstawie tego, jakie kategorie faktycznie
+  // istnieją w GALLERY — nowa kategoria (nowy folder w images/source/)
+  // automatycznie dostaje tu swój przycisk, bez zmian w HTML.
+  function buildFilterTabs() {
+    const present = [...new Set(GALLERY.map((item) => item.category))];
+    const order = (typeof CATEGORY_META !== "undefined" && CATEGORY_META.order) || [];
+    present.sort((a, b) => {
+      const ia = order.indexOf(a);
+      const ib = order.indexOf(b);
+      if (ia === -1 && ib === -1) return a.localeCompare(b);
+      if (ia === -1) return 1;
+      if (ib === -1) return -1;
+      return ia - ib;
+    });
+    present.forEach((cat) => {
+      const btn = document.createElement("button");
+      btn.className = "filter";
+      btn.dataset.filter = cat;
+      btn.setAttribute("role", "tab");
+      btn.setAttribute("aria-selected", "false");
+      btn.textContent = categoryLabelFor(cat);
+      filtersEl.appendChild(btn);
+    });
+  }
+  buildFilterTabs();
 
   function frameLabel(item, indexInAll) {
     // Contact-sheet style frame number, e.g. "07A"
@@ -140,19 +174,24 @@
     galleryEl.querySelectorAll(".gallery__btn").forEach((btn) => {
       btn.addEventListener("click", () => openLightbox(Number(btn.dataset.index)));
     });
+
+    document.querySelectorAll(".gallery__item").forEach((el) => {
+      el.classList.add("reveal", "is-visible");
+    });
   }
 
-  filters.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      filters.forEach((b) => {
-        b.classList.remove("is-active");
-        b.setAttribute("aria-selected", "false");
-      });
-      btn.classList.add("is-active");
-      btn.setAttribute("aria-selected", "true");
-      activeFilter = btn.dataset.filter;
-      renderGallery();
+  // Delegacja zdarzeń — działa też dla zakładek dodanych dynamicznie przez buildFilterTabs()
+  filtersEl.addEventListener("click", (e) => {
+    const btn = e.target.closest(".filter");
+    if (!btn) return;
+    filtersEl.querySelectorAll(".filter").forEach((b) => {
+      b.classList.remove("is-active");
+      b.setAttribute("aria-selected", "false");
     });
+    btn.classList.add("is-active");
+    btn.setAttribute("aria-selected", "true");
+    activeFilter = btn.dataset.filter;
+    renderGallery();
   });
 
   renderGallery();
@@ -326,7 +365,7 @@
       card.className = "price-card" + (pkg.featured ? " price-card--featured" : "");
       card.style.transitionDelay = `${i * 90}ms`;
       card.innerHTML = `
-        ${pkg.featured ? '<span class="price-card__badge">Najczęściej wybierane</span>' : ""}
+        ${pkg.featured ? '<span class="price-card__badge">Polecane</span>' : ""}
         <h3 class="price-card__name">${pkg.name}</h3>
         <p class="price-card__price">${pkg.price} <span>${pkg.unit}</span></p>
         <p class="price-card__desc">${pkg.desc}</p>
@@ -429,12 +468,4 @@
     el.classList.add("reveal");
     io.observe(el);
   });
-
-  // Re-observe gallery items whenever filter changes
-  const galleryObserverPatch = () => {
-    document.querySelectorAll(".gallery__item").forEach((el) => {
-      el.classList.add("reveal", "is-visible");
-    });
-  };
-  filters.forEach((btn) => btn.addEventListener("click", () => setTimeout(galleryObserverPatch, 0)));
 })();

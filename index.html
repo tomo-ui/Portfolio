@@ -69,7 +69,7 @@
         <span class="hero__title-line">Tomasz</span>
         <span class="hero__title-line hero__title-line--italic">Konwicki</span>
       </h1>
-      <p class="hero__lede">Naturalne światło. Barwa i kontrast jako język obrazu. Lata pracy z modelkami, artystami i markami, którzy chcą wyglądać tak dobrze.</p>
+      <p class="hero__lede">Naturalne światło. Barwa i kontrast jako język obrazu. Lata pracy z modelkami, artystami i markami, które chcą wyglądać tak dobrze, jak brzmią.</p>
       <div class="hero__actions">
         <a href="#portfolio" class="btn btn--primary">Zobacz portfolio</a>
         <a href="#kontakt" class="btn btn--ghost">Umów sesję</a>
@@ -88,23 +88,34 @@
     </div>
     <div class="about__grid">
       <figure class="about__frame frame">
-        <img src="images/full/hero-tomasz.webp" alt="Tomasz Konwicki" loading="lazy">
-        <figcaption class="frame__tag"><span>TK · KATOWICE</span><span>2026</span></figcaption>
+        <button class="about__flip" id="aboutFlip" aria-label="Pokaż logo Tomasza Konwickiego">
+          <div class="about__flip-face about__flip-front">
+            <img src="images/full/hero-tomasz.webp" alt="Tomasz Konwicki" loading="lazy">
+            <span class="frame__tag"><span>TK · KATOWICE</span><span>2026</span></span>
+          </div>
+          <div class="about__flip-face about__flip-back">
+            <svg viewBox="0 0 40 40" width="72" height="72" aria-hidden="true">
+              <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="1.2"/>
+              <circle cx="20" cy="20" r="7.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
+            </svg>
+            <span class="about__flip-initials">Tomasz Konwicki</span>
+            <span class="about__flip-sub">Fotograf · Grafik · Marketing</span>
+          </div>
+        </button>
       </figure>
       <div class="about__text">
-        <p>Mam 29 lat i pochodzę z Katowic. Od kilku lat łączę fotografię, grafikę i marketing w jedną, spójną usługę - od sesji zdjęciowej, przez obróbkę i grading, po materiały gotowe do social mediów i kampanii.</p>
-        <p>Pracuję z modelkami, artystami i twórcami o różnych charakterach - na planach teledysków, koncertach i sesjach wizerunkowych. Wyróżnia mnie podejście oparte na naturalnym świetle otoczenia oraz barwnych, kontrastowych kadrach, które nie potrzebują sztucznego oświetlenia, by robić wrażenie.</p>
-        <p>Doświadczenie w marketingu i grafice pozwala mi projektować spójne identyfikacje wizualne - od pojedynczego zdjęcia po pełną kampanię.</p>
+        <p>Mam 29 lat i pochodzę z Katowic. Od trzech lat łączę fotografię, grafikę i marketing w jedną, spójną usługę — od sesji zdjęciowej, przez obróbkę i grading, po materiały gotowe do social mediów i kampanii.</p>
+        <p>Pracuję z modelkami, artystami i twórcami o różnych charakterach — na planach teledysków, koncertach i sesjach portretowych. Wyróżnia mnie podejście oparte na naturalnym świetle otoczenia oraz barwnych, kontrastowych kadrach, które nie potrzebują sztucznego oświetlenia, by robić wrażenie.</p>
+        <p>Doświadczenie w marketingu i grafice pozwala mi projektować spójne identyfikacje wizualne — od pojedynczego zdjęcia po pełną kampanię.</p>
 
         <ul class="facts" role="list">
           <li><span class="facts__num">29</span><span class="facts__label">lat</span></li>
-          <li><span class="facts__num">10</span><span class="facts__label">lat doświadczenia</span></li>
+          <li><span class="facts__num">9</span><span class="facts__label">lata doświadczenia</span></li>
           <li><span class="facts__num">Katowice</span><span class="facts__label">baza działania</span></li>
         </ul>
 
         <div class="chips" role="list">
           <span class="chip">Fotografia portretowa</span>
-          <span class="chip">Fotografia wizerunkowa</span>
           <span class="chip">Plan zdjęciowy / teledysk</span>
           <span class="chip">Color grading</span>
           <span class="chip">Grafika &amp; branding</span>
@@ -136,14 +147,8 @@
       <p class="section__sub">Wybrane kadry z sesji portretowych, planów teledysków, koncertów i projektów graficznych.</p>
     </div>
 
-    <div class="filters" role="tablist" aria-label="Filtruj portfolio">
+    <div class="filters" id="filters" role="tablist" aria-label="Filtruj portfolio">
       <button class="filter is-active" data-filter="all" role="tab" aria-selected="true">Wszystko</button>
-      <button class="filter" data-filter="modelki" role="tab" aria-selected="false">Modelki</button>
-      <button class="filter" data-filter="markiza" role="tab" aria-selected="false">Markiza</button>
-      <button class="filter" data-filter="chlodnonam" role="tab" aria-selected="false">Chłodnonam</button>
-      <button class="filter" data-filter="jwp" role="tab" aria-selected="false">JWP Sydoz Łajzol</button>
-      <button class="filter" data-filter="koncerty" role="tab" aria-selected="false">Koncerty</button>
-      <button class="filter" data-filter="grafika" role="tab" aria-selected="false">Grafika</button>
     </div>
 
     <div class="gallery" id="gallery" aria-live="polite"></div>
@@ -159,7 +164,7 @@
       <a href="https://instagram.com/tokonwicki" target="_blank" rel="noopener" class="btn btn--ghost">@tokonwicki — obserwuj</a>
     </div>
     <div class="ig-grid" id="igGrid"></div>
-    <p class="ig-note">Podgląd trzech wyróżnionych realizacji - pełny, aktualny feed znajdziesz na Instagramie.</p>
+    <p class="ig-note">Podgląd trzech wyróżnionych realizacji — pełny, aktualny feed znajdziesz na Instagramie.</p>
   </section>
 
   <!-- CENNIK -->
@@ -167,8 +172,7 @@
     <div class="section__head">
       <p class="eyebrow">04 — Cennik</p>
       <h2 class="section__title">Pakiety<br><em>dopasowane do celu.</em></h2>
-      <p class="section__sub">Ceny startowe |
-         Ostateczna wycena zależy od zakresu, lokalizacji i czasu realizacji.</p>
+      <p class="section__sub">Ceny startowe — ostateczna wycena zależy od zakresu, lokalizacji i czasu realizacji. Wszystkie kwoty edytujesz w <code>js/data.js</code>.</p>
     </div>
 
     <div class="pricing__tabs" role="tablist">
@@ -258,6 +262,7 @@
   </figure>
 </div>
 
+<script src="js/category-labels.js"></script>
 <script src="js/gallery-data.js"></script>
 <script src="js/data.js"></script>
 <script src="js/main.js"></script>

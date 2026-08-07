@@ -50,28 +50,54 @@ Otwórz plik **`js/data.js`** — na górze znajduje się obiekt `PRICING` z dwi
 
 Dodaj, usuń albo zmień dowolny pakiet — strona przeliczy i odrysuje karty automatycznie po odświeżeniu.
 
-## Jak podmienić zdjęcia w portfolio
+## Jak dodawać zdjęcia — teraz w pełni automatycznie 🎉
 
-Galeria zawiera **komplet zdjęć** ze wszystkich dostarczonych folderów (126 sztuk): `modelki` (31), `markiza` (30), `chlodnonam` (13), `jwp` (28), `koncerty` (12), `grafika` (12) — każdy folder to osobna zakładka filtra w portfolio.
+Nie musisz już ręcznie edytować `js/gallery-data.js` ani dodawać przycisków filtrów w `index.html`. Wystarczy wrzucić zdjęcia do odpowiedniego folderu — resztą zajmuje się automat (GitHub Actions) w ciągu ok. 1 minuty od wrzucenia.
 
-1. Wrzuć nowe zdjęcia do `images/full/` (pełna jakość, max ~1600 px szerokości) i `images/thumb/` (miniatura, ~700 px szerokości) w formacie `.webp` (najlżejszy format dla przeglądarek).
-2. Dodaj wpis w `js/gallery-data.js`:
+**Jak to działa:**
+
+1. Wrzuć zdjęcia (zwykłe .jpg/.png, nie muszą być zoptymalizowane) do folderu:
+   ```
+   images/source/<nazwa-kategorii>/
+   ```
+   np. `images/source/modelki/nowa-sesja.jpg`. Możesz to zrobić wprost w przeglądarce na GitHubie: wejdź w folder → **Add file → Upload files**.
+
+2. **Istniejąca kategoria** (np. `modelki`) → zdjęcie po prostu dojdzie do tej zakładki w portfolio.
+   **Nowa kategoria** (np. `images/source/sesja-slubna/`) → strona **sama utworzy nową zakładkę filtra** o nazwie "Sesja Slubna" (domyślnie na podstawie nazwy folderu — możesz ją ładnie poprawić, patrz niżej).
+
+3. Po commicie/wgraniu, wejdź w zakładkę **Actions** na GitHubie — zobaczysz uruchomiony workflow "Aktualizacja galerii zdjęć". Po ok. 30–90 sekundach (czas zależy od liczby i rozmiaru zdjęć) strona jest gotowa — po prostu odśwież ją w przeglądarce.
+
+**Co dzieje się pod spodem:** GitHub Actions uruchamia `tools/build_gallery.py`, który konwertuje zdjęcia do lekkiego formatu WebP (wersja pełna + miniatura), generuje `js/gallery-data.js` i `js/category-labels.js`, i sam commituje gotowe pliki z powrotem do repozytorium. Usunięcie zdjęcia z `images/source/...` przy kolejnym uruchomieniu **usunie je też ze strony**.
+
+**Jak zmienić nazwę zakładki** (np. "Sesja Slubna" → "Sesja Ślubna Ani i Kuby"): otwórz `tools/category-labels.json`, popraw tekst w polu `"labels"`, zapisz — automat sam się uruchomi i zaktualizuje stronę (bo ten plik też jest obserwowany przez workflow).
+
+**Jednorazowa migracja** (tylko przy pierwszym wdrożeniu tego systemu): obecne zdjęcia trzeba raz przenieść do `images/source/`, żeby automat je "zobaczył". Najprościej lokalnie:
+```bash
+pip install pillow --break-system-packages
+python3 tools/migrate_to_source.py   # kopiuje obecne zdjęcia do images/source/<kategoria>/
+python3 tools/build_gallery.py       # przelicza wszystko na nowo i sprawdza, że działa
+```
+Potem zwykły `git add . && git commit -m "Migracja galerii" && git push` — od tego momentu wystarczy już tylko wrzucać nowe zdjęcia do `images/source/`.
+
+**Uwaga:** ten mechanizm wymaga uprawnień do zapisu dla GitHub Actions w repo. Jeśli workflow nie może commitować z powrotem, wejdź w **Settings → Actions → General → Workflow permissions** i zaznacz **"Read and write permissions"**.
+
+Jeśli wolisz zrobić to bez GitHuba (np. lokalnie, bez internetu), możesz też po prostu odpalić `python3 tools/build_gallery.py` samodzielnie i wypchnąć zmiany ręcznie.
+
+## Jak podmienić zdjęcia ręcznie (bez automatu)
+
+Jeśli wolisz dodać pojedyncze zdjęcie ręcznie, bez czekania na automat — nadal możesz edytować `js/gallery-data.js` bezpośrednio. Pamiętaj: przy najbliższym uruchomieniu automatu z sekcji wyżej ten plik zostanie nadpisany na podstawie zawartości `images/source/`, więc taka ręczna zmiana jest tymczasowa, chyba że dodasz też odpowiedni plik źródłowy do `images/source/`.
 
 ```js
 {
-  "id": "modelki-032",
-  "category": "modelki",        // modelki | markiza | chlodnonam | jwp | koncerty | grafika
+  "id": "modelki-013",
+  "category": "modelki",
   "categoryLabel": "Modelki",
   "project": "Nazwa sesji / projektu",
-  "full": "images/full/modelki-032.webp",
-  "thumb": "images/thumb/modelki-032.webp",
-  "w": 1600, "h": 2000            // wymiary zdjęcia w px (zachowują proporcje kafelka)
+  "full": "images/full/modelki/013.webp",
+  "thumb": "images/thumb/modelki/013.webp",
+  "w": 1600, "h": 2000
 }
 ```
-
-Żeby przekonwertować od zera cały folder ze zdjęciami (np. po podmianie całej sesji), użyj `tools/convert_all.py` — bierze **wszystkie** pliki z folderów `raw_all/MODELKI`, `raw_all/Plan Teledysku Markiza` itd. i konwertuje je bez pomijania żadnego zdjęcia. Osobno, `tools/convert_grafika.py` robi to samo dla folderu `Grafiki`.
-
-Jeśli dodajesz nową kategorię (np. kolejny plan teledysku), dodaj też przycisk filtra w `index.html` w sekcji `.filters` — wystarczy skopiować istniejący `<button class="filter" data-filter="...">Nazwa</button>` i podmienić `data-filter` na nową wartość `category`.
 
 ## Jak podmienić zdjęcie hero (główne na stronie)
 
