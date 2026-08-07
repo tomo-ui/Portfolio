@@ -34,17 +34,26 @@
       aboutFlip.classList.toggle("about__flip--photo");
     });
   }
-  
   if (aboutFlip && aboutSection) {
-    // Auto-odwracanie: zdjęcie pokazuje się, gdy sekcja "O mnie" jest w widoku,
-    // i wraca do logo, gdy użytkownik z niej wyjedzie (przewinie dalej lub cofnie).
+    // Auto-odwracanie: zdjęcie pokazuje się dopiero 2 sekundy po tym,
+    // jak sekcja "O mnie" wjedzie w widok — a wraca do logo od razu,
+    // gdy użytkownik z niej wyjedzie (przewinie dalej lub cofnie).
+    let aboutFlipTimer = null;
     const aboutIO = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          aboutFlip.classList.toggle("about__flip--photo", entry.isIntersecting);
+          if (entry.isIntersecting) {
+            clearTimeout(aboutFlipTimer);
+            aboutFlipTimer = setTimeout(() => {
+              aboutFlip.classList.add("about__flip--photo");
+            }, 2000);
+          } else {
+            clearTimeout(aboutFlipTimer);
+            aboutFlip.classList.remove("about__flip--photo");
+          }
         });
       },
-      { threshold: 0.52 }
+      { threshold: 0.4 }
     );
     aboutIO.observe(aboutSection);
   }
