@@ -165,5 +165,5 @@ const TESTIMONIALS = [
 // przychodziły od razu na maila bez otwierania Poczty (np. na telefonie),
 // załóż darmowe konto na https://formspree.io, utwórz formularz i wklej
 // tutaj jego adres w formacie: "https://formspree.io/f/xxxxxxx"
-const FORM_ENDPOINT = ""; // np. "https://formspree.io/f/abcdwxyz"
+const FORM_ENDPOINT = "https://formspree.io/f/xyegzagb"; // np. "https://formspree.io/f/abcdwxyz"
 const CONTACT_EMAIL = "tokonwicki@gmail.com";
