@@ -24,6 +24,23 @@
     io.observe(el);
   }
 
+  /* ---------------- TELEDYSK (odtwarzanie YouTube po kliknięciu) ---------------- */
+  const videoPlayer = document.getElementById("videoPlayer");
+  if (videoPlayer) {
+    videoPlayer.addEventListener("click", () => {
+      const ytId = videoPlayer.getAttribute("data-yt-id");
+      if (!ytId) return;
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0`;
+      iframe.title = "Teledysk";
+      iframe.frameBorder = "0";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      iframe.allowFullscreen = true;
+      videoPlayer.innerHTML = "";
+      videoPlayer.appendChild(iframe);
+    });
+  }
+
   /* ---------------- ABOUT PHOTO FLIP CARD ---------------- */
   const aboutFlip = document.getElementById("aboutFlip");
   const aboutSection = document.getElementById("o-mnie");
