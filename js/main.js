@@ -493,6 +493,27 @@
 
   /* ---------------- SCROLL REVEAL: statyczne sekcje (dynamiczne rejestrują się same przy tworzeniu) ---------------- */
   document
-    .querySelectorAll(".section__head, .about__frame, .about__text, .contact__form, .contact__side")
+    .querySelectorAll(".section__head, .about__frame, .about__text, .video__wrap, .video__meta, .contact__form, .contact__side")
     .forEach(observeReveal);
+
+  /* ---------------- TELEDYSK: odtwarzacz "klik i graj" (lekki, bez auto-ładowania YouTube) ---------------- */
+  const videoPlayer = document.getElementById("videoPlayer");
+  const videoPlayBtn = document.getElementById("videoPlayBtn");
+  if (videoPlayer && videoPlayBtn) {
+    const playVideo = () => {
+      const ytId = videoPlayer.dataset.ytId;
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0`;
+      iframe.title = "Odtwarzacz teledysku YouTube";
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+      iframe.allowFullscreen = true;
+      videoPlayer.innerHTML = "";
+      videoPlayer.appendChild(iframe);
+    };
+    videoPlayer.addEventListener("click", playVideo);
+    videoPlayBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      playVideo();
+    });
+  }
 })();
