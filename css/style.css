@@ -77,6 +77,32 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Film grain overlay */
+/* Oddychająca poświata w tle całej strony — tylko na urządzeniach dotykowych,
+   ten sam charakter co połysk w navie, ale rozlany po całym viewport. */
+.ambient-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+}
+@media (hover: none) {
+  .ambient-glow {
+    opacity: 1;
+    background:
+      radial-gradient(circle 280px at 15% 20%, rgba(227, 168, 87, 0.16), transparent 70%),
+      radial-gradient(circle 320px at 85% 75%, rgba(226, 80, 63, 0.13), transparent 70%),
+      radial-gradient(circle 240px at 50% 50%, rgba(255, 255, 255, 0.05), transparent 70%);
+    background-repeat: no-repeat;
+    animation: ambientGlowDrift 4s ease-in-out infinite alternate;
+  }
+}
+@keyframes ambientGlowDrift {
+  0%   { background-position: 10% 15%, 90% 80%, 40% 30%; }
+  50%  { background-position: 35% 45%, 65% 55%, 55% 60%; }
+  100% { background-position: 60% 10%, 30% 90%, 70% 20%; }
+}
+
 .grain {
   position: fixed;
   inset: 0;
@@ -180,7 +206,7 @@ a { color: inherit; text-decoration: none; }
     background: radial-gradient(circle 220px, rgba(255, 255, 255, 0.15), transparent 70%);
     background-repeat: no-repeat;
     background-size: 160% 340%;
-    animation: navGlassDrift 7s ease-in-out infinite alternate;
+    animation: navGlassDrift 3.5s ease-in-out infinite alternate;
   }
   @keyframes navGlassDrift {
     from { background-position: 0% 0%; }

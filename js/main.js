@@ -63,6 +63,18 @@
   const burger = document.getElementById("burger");
   const mobileMenu = document.getElementById("mobileMenu");
 
+  // Połysk "liquid glass" podążający za kursorem — ustawia --glass-x/--glass-y,
+  // które czyta .nav::after (radial-gradient) w CSS. Tylko urządzenia z myszką/trackpadem.
+  if (window.matchMedia("(hover: hover)").matches) {
+    nav.addEventListener("mousemove", (e) => {
+      const rect = nav.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      nav.style.setProperty("--glass-x", `${x}%`);
+      nav.style.setProperty("--glass-y", `${y}%`);
+    });
+  }
+
   const scrollProgress = document.getElementById("scrollProgress");
   const heroLayers = [document.getElementById("heroImgA"), document.getElementById("heroImgB")];
   let ticking = false;
