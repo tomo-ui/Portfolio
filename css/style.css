@@ -147,8 +147,8 @@ a { color: inherit; text-decoration: none; }
 .nav--scrolled::before,
 .nav--menu-open::before {
   opacity: 1;
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(1px) saturate(160%);
+  backdrop-filter: blur(1px) saturate(160%);
 }
 /* Delikatna refrakcja "liquid" — dogrywa się tam, gdzie przeglądarka wspiera filtry SVG w backdrop-filter (głównie Chromium); w innych po prostu zostaje samo rozmycie powyżej */
 .nav--scrolled::before {
@@ -156,7 +156,7 @@ a { color: inherit; text-decoration: none; }
   -webkit-backdrop-filter: blur(1px) saturate(160%);
 }
 
-/* Połysk podążający za kursorem (ustawiany przez JS: --glass-x / --glass-y) */
+/* Połysk podążający za kursorem (ustawiany przez JS: --glass-x / --glass-y) — urządzenia z myszką/trackpadem */
 .nav::after {
   content: "";
   position: absolute;
@@ -168,7 +168,30 @@ a { color: inherit; text-decoration: none; }
   background: radial-gradient(circle 240px at var(--glass-x, 50%) var(--glass-y, 0%), rgba(255, 255, 255, 0.16), transparent 72%);
   transition: opacity 0.4s var(--ease);
 }
-.nav--scrolled:hover::after { opacity: 1; }
+@media (hover: hover) {
+  .nav--scrolled:hover::after { opacity: 1; }
+}
+
+/* Urządzenia dotykowe (np. iPhone) nie wspierają refrakcji SVG w backdrop-filter i nie mają :hover —
+   dokładamy delikatny, samoistnie "oddychający" połysk, żeby szkło mimo to wyglądało żywo */
+@media (hover: none) {
+  .nav--scrolled::after {
+    opacity: 1;
+    background: radial-gradient(circle 220px, rgba(255, 255, 255, 0.15), transparent 70%);
+    background-repeat: no-repeat;
+    background-size: 160% 340%;
+    animation: navGlassDrift 7s ease-in-out infinite alternate;
+  }
+  @keyframes navGlassDrift {
+    from { background-position: 0% 0%; }
+    to   { background-position: 100% 100%; }
+  }
+  /* Bez refrakcji trochę mocniejsza saturacja/kontrast, żeby szkło nie wyglądało płasko */
+  .nav--scrolled::before, .nav--menu-open::before {
+    -webkit-backdrop-filter: blur(20px) saturate(180%) contrast(108%);
+    backdrop-filter: blur(20px) saturate(180%) contrast(108%);
+  }
+}
 
 .nav__mark, .nav__links, .nav__burger { position: relative; z-index: 1; }
 
