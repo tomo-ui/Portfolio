@@ -105,7 +105,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* =========================================================================
-   NAV
+   NAV — "Liquid Glass"
+   Warstwa szkła: rozmycie + saturacja + delikatna refrakcja SVG (feDisplacementMap),
+   specular highlighty na krawędziach i połysk podążający za kursorem.
    ========================================================================= */
 .nav {
   position: fixed;
@@ -115,18 +117,72 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: space-between;
   padding: 22px var(--gutter);
-  transition: background 0.35s var(--ease), padding 0.35s var(--ease), border-color 0.35s var(--ease);
-  border-bottom: 0px solid transparent;
+  isolation: isolate;
+  transition:
+    top 0.6s var(--ease),
+    left 0.6s var(--ease),
+    right 0.6s var(--ease),
+    padding 0.5s var(--ease),
+    border-radius 0.6s var(--ease);
 }
+
+/* Warstwa szkła — rozmycie tła + refrakcja */
+.nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.015));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 12px 34px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.55s var(--ease);
+}
+/* Rozmycie bazowe (wszystkie przeglądarki) */
+.nav--scrolled::before,
+.nav--menu-open::before {
+  opacity: 1;
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+}
+/* Delikatna refrakcja "liquid" — dogrywa się tam, gdzie przeglądarka wspiera filtry SVG w backdrop-filter (głównie Chromium); w innych po prostu zostaje samo rozmycie powyżej */
+.nav--scrolled::before {
+  backdrop-filter: blur(1px) saturate(160%) url(#liquid-glass-distortion);
+  -webkit-backdrop-filter: blur(1px) saturate(160%);
+}
+
+/* Połysk podążający za kursorem (ustawiany przez JS: --glass-x / --glass-y) */
+.nav::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(circle 240px at var(--glass-x, 50%) var(--glass-y, 0%), rgba(255, 255, 255, 0.16), transparent 72%);
+  transition: opacity 0.4s var(--ease);
+}
+.nav--scrolled:hover::after { opacity: 1; }
+
+.nav__mark, .nav__links, .nav__burger { position: relative; z-index: 1; }
+
 .nav--scrolled,
 .nav--menu-open {
-  background: rgba(241, 240, 240, 0.062);
-  backdrop-filter: blur(10px) saturate(100%);
-  -webkit-backdrop-filter: blur(10px) saturate(100%);
-  padding: 14px var(--gutter);
+  padding: 12px 26px;
 }
-.nav--scrolled { border-color: var(--line-soft); }
-.nav--menu-open { border-color: transparent; }
+.nav--scrolled {
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  border-radius: 20px;
+}
+.nav--menu-open { border-radius: 0; }
 
 .nav__mark {
   display: flex;
@@ -205,10 +261,10 @@ a { color: inherit; text-decoration: none; }
   inset: 0;
   z-index: 190;
   background: rgba(235, 232, 232, 0);
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
-  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  backdrop-filter: blur(20px) saturate(160%) url(#liquid-glass-distortion);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
     inset 0 -1px 40px rgba(255, 255, 255, 0.02),
     0 30px 60px rgba(0, 0, 0, 0.5);
   display: flex;
@@ -322,7 +378,7 @@ a { color: inherit; text-decoration: none; }
 .hero__content {
   position: relative;
   z-index: 2;
-  padding: 0 var(--gutter) 96px;
+  padding: 104px var(--gutter) 96px;
   max-width: 760px;
 }
 .hero__title {
@@ -998,23 +1054,48 @@ a { color: inherit; text-decoration: none; }
 }
 .lightbox__close, .lightbox__nav {
   position: absolute;
-  background: none;
-  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   color: var(--ink);
   cursor: pointer;
   border-radius: 100px;
-  transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%) url(#liquid-glass-distortion);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 6px 18px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.25s var(--ease), color 0.25s var(--ease), background 0.25s var(--ease), transform 0.2s var(--ease);
 }
 .lightbox__close { top: 26px; right: 26px; width: 44px; height: 44px; font-size: 16px; }
 .lightbox__nav { top: 50%; transform: translateY(-50%); width: 52px; height: 52px; font-size: 26px; }
 .lightbox__nav--prev { left: 26px; }
 .lightbox__nav--next { right: 26px; }
-.lightbox__close:hover, .lightbox__nav:hover { border-color: var(--accent); color: var(--accent); }
+.lightbox__close:hover, .lightbox__nav:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.09);
+}
+.lightbox__nav:active { transform: translateY(-50%) scale(0.94); }
+.lightbox__close:active { transform: scale(0.94); }
+
+/* Zdjęcie w lightboxie — przeciąganie palcem/myszką między zdjęciami */
+.lightbox img {
+  touch-action: pan-y;
+  cursor: grab;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.lightbox img:active { cursor: grabbing; }
 
 /* =========================================================================
    RESPONSIVE
    ========================================================================= */
 @media (max-width: 900px) {
+  .nav--scrolled { left: 10px; right: 10px; top: 10px; border-radius: 16px; }
   .nav__links { display: none; }
   .nav__burger { display: flex; }
   .about__grid { grid-template-columns: 1fr; }
@@ -1035,4 +1116,12 @@ a { color: inherit; text-decoration: none; }
   .hero__content { padding-bottom: 72px; }
   .hero__scroll { display: none; }
   .footer__row { flex-direction: column; align-items: flex-start; }
+}
+
+/* Bardzo niskie ekrany (telefon w poziomie, małe okno) — mniejszy hero, by treść nie wchodziła pod nav */
+@media (max-height: 620px) {
+  .hero__content { padding-top: 92px; padding-bottom: 48px; }
+  .hero__title { font-size: clamp(38px, 8vw, 90px); margin: 12px 0 16px; }
+  .hero__lede { margin-bottom: 4px; }
+  .hero__actions { gap: 12px; }
 }

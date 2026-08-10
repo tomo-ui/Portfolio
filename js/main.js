@@ -86,6 +86,17 @@
   }, { passive: true });
   onScroll();
 
+  /* ---------------- NAV: połysk "liquid glass" podążający za kursorem ---------------- */
+  if (nav && window.matchMedia("(hover: hover)").matches) {
+    nav.addEventListener("pointermove", (e) => {
+      const rect = nav.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      nav.style.setProperty("--glass-x", `${x}%`);
+      nav.style.setProperty("--glass-y", `${y}%`);
+    });
+  }
+
   /* ---------------- HERO SLIDESHOW — wyłączony na życzenie (zdjęcie hero jest statyczne) ----------------
      Żeby przywrócić automatyczną zmianę zdjęć hero co 5 sekund (tylko z kategorii "modelki"),
      usuń komentarz z bloku poniżej.
@@ -242,8 +253,17 @@
   const lightboxCaption = document.getElementById("lightboxCaption");
   let currentIndex = 0;
 
+  function setImgTransform(x, withTransition) {
+    lightboxImg.style.transition = withTransition
+      ? "transform 0.35s var(--ease), opacity 0.35s var(--ease)"
+      : "none";
+    lightboxImg.style.transform = `translateX(${x}px)`;
+  }
+
   function openLightbox(index) {
     currentIndex = index;
+    setImgTransform(0, false);
+    lightboxImg.style.opacity = "1";
     updateLightbox();
     lightbox.classList.add("is-open");
     lightbox.setAttribute("aria-hidden", "false");
@@ -257,6 +277,25 @@
     lightboxCaption.textContent = `${item.project} — ${item.categoryLabel}`;
   }
 
+  // direction: 1 = następne zdjęcie (wjeżdża z prawej), -1 = poprzednie (wjeżdża z lewej)
+  function goToPhoto(direction) {
+    if (visibleItems.length < 2) return;
+    const outX = direction === 1 ? -window.innerWidth * 0.5 : window.innerWidth * 0.5;
+
+    setImgTransform(outX, true);
+    lightboxImg.style.opacity = "0";
+
+    setTimeout(() => {
+      currentIndex = (currentIndex + direction + visibleItems.length) % visibleItems.length;
+      updateLightbox();
+      setImgTransform(direction === 1 ? 90 : -90, false);
+      requestAnimationFrame(() => {
+        setImgTransform(0, true);
+        lightboxImg.style.opacity = "1";
+      });
+    }, 260);
+  }
+
   function closeLightbox() {
     lightbox.classList.remove("is-open");
     lightbox.setAttribute("aria-hidden", "true");
@@ -267,20 +306,55 @@
   lightbox.addEventListener("click", (e) => {
     if (e.target === lightbox) closeLightbox();
   });
-  document.getElementById("lightboxPrev").addEventListener("click", () => {
-    currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
-    updateLightbox();
-  });
-  document.getElementById("lightboxNext").addEventListener("click", () => {
-    currentIndex = (currentIndex + 1) % visibleItems.length;
-    updateLightbox();
-  });
+  document.getElementById("lightboxPrev").addEventListener("click", () => goToPhoto(-1));
+  document.getElementById("lightboxNext").addEventListener("click", () => goToPhoto(1));
   document.addEventListener("keydown", (e) => {
     if (!lightbox.classList.contains("is-open")) return;
     if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowLeft") document.getElementById("lightboxPrev").click();
-    if (e.key === "ArrowRight") document.getElementById("lightboxNext").click();
+    if (e.key === "ArrowLeft") goToPhoto(-1);
+    if (e.key === "ArrowRight") goToPhoto(1);
   });
+
+  /* ---------------- LIGHTBOX: przesuwanie zdjęć palcem (swipe) ---------------- */
+  const SWIPE_THRESHOLD = 70; // px, minimalny dystans by uznać gest za "swipe"
+  let dragStartX = 0;
+  let dragDeltaX = 0;
+  let isDragging = false;
+  let activePointerId = null;
+
+  lightboxImg.addEventListener("pointerdown", (e) => {
+    if (visibleItems.length < 2) return;
+    isDragging = true;
+    activePointerId = e.pointerId;
+    dragStartX = e.clientX;
+    dragDeltaX = 0;
+    lightboxImg.setPointerCapture(e.pointerId);
+    setImgTransform(0, false);
+  });
+
+  lightboxImg.addEventListener("pointermove", (e) => {
+    if (!isDragging || e.pointerId !== activePointerId) return;
+    dragDeltaX = e.clientX - dragStartX;
+    setImgTransform(dragDeltaX, false);
+  });
+
+  function endLightboxDrag(e) {
+    if (!isDragging || (activePointerId !== null && e.pointerId !== activePointerId)) return;
+    isDragging = false;
+    const delta = dragDeltaX;
+    dragDeltaX = 0;
+
+    if (Math.abs(delta) > SWIPE_THRESHOLD && visibleItems.length > 1) {
+      // delta < 0 -> palec przesunięty w lewo -> następne zdjęcie; delta > 0 -> poprzednie
+      goToPhoto(delta < 0 ? 1 : -1);
+    } else {
+      setImgTransform(0, true);
+    }
+  }
+
+  lightboxImg.addEventListener("pointerup", endLightboxDrag);
+  lightboxImg.addEventListener("pointercancel", endLightboxDrag);
+  lightboxImg.addEventListener("dragstart", (e) => e.preventDefault());
 
   /* ---------------- INSTAGRAM PREVIEW ---------------- */
   const igGrid = document.getElementById("igGrid");

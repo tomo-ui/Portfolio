@@ -20,6 +20,16 @@
 </head>
 <body>
 
+<!-- Filtr SVG dla efektu "liquid glass" w nav — delikatna refrakcja tła pod paskiem nawigacji -->
+<svg aria-hidden="true" focusable="false" style="position:absolute; width:0; height:0; overflow:hidden;">
+  <filter id="liquid-glass-distortion" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.01 0.028" numOctaves="3" seed="7" stitchTiles="stitch" result="noise" />
+    <feGaussianBlur in="noise" stdDeviation="6" result="softNoise" />
+    <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="50" xChannelSelector="R" yChannelSelector="G" result="displaced" />
+    <feGaussianBlur in="displaced" stdDeviation="1" />
+  </filter>
+</svg>
+
 <div class="grain"></div>
 <div class="scroll-progress" id="scrollProgress"></div>
 
