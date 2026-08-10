@@ -1090,6 +1090,7 @@ a { color: inherit; text-decoration: none; }
   background: rgba(9, 8, 7, 0.96);
   z-index: 500;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   opacity: 0;
@@ -1193,6 +1194,7 @@ a { color: inherit; text-decoration: none; }
    a przycisk zamknięcia dostaje mocniejsze, zawsze czytelne tło. */
 @media (hover: none) {
   .lightbox__nav { display: none; }
+  .lightbox__caption { display: none; }
   .lightbox__swipe-hint { display: block; }
   .lightbox__close {
     background: rgba(13, 12, 11, 0.55);
