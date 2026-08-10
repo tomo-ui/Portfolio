@@ -86,22 +86,11 @@
   }, { passive: true });
   onScroll();
 
-  /* ---------------- NAV: połysk "liquid glass" podążający za kursorem ---------------- */
-  if (nav && window.matchMedia("(hover: hover)").matches) {
-    nav.addEventListener("pointermove", (e) => {
-      const rect = nav.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      nav.style.setProperty("--glass-x", `${x}%`);
-      nav.style.setProperty("--glass-y", `${y}%`);
-    });
-  }
-
   /* ---------------- HERO SLIDESHOW — wyłączony na życzenie (zdjęcie hero jest statyczne) ----------------
      Żeby przywrócić automatyczną zmianę zdjęć hero co 5 sekund (tylko z kategorii "modelki"),
      usuń komentarz z bloku poniżej.
   */
-  
+  /*
   (function heroSlideshow() {
     const heroModelki = GALLERY.filter((item) => item.category === "modelki").map((item) => item.full);
     if (heroModelki.length < 2) return;
@@ -137,7 +126,7 @@
 
     setInterval(nextSlide, 5000);
   })();
-  
+  */
 
   burger.addEventListener("click", () => {
     const open = mobileMenu.classList.toggle("is-open");
@@ -247,114 +236,124 @@
 
   renderGallery();
 
-  /* ---------------- LIGHTBOX ---------------- */
+  /* ---------------- LIGHTBOX (karuzela: poprzedni / aktualny / następny + swipe) ---------------- */
   const lightbox = document.getElementById("lightbox");
+  const lightboxViewport = document.getElementById("lightboxViewport");
+  const lightboxTrack = document.getElementById("lightboxTrack");
+  const lightboxImgPrev = document.getElementById("lightboxImgPrev");
   const lightboxImg = document.getElementById("lightboxImg");
+  const lightboxImgNext = document.getElementById("lightboxImgNext");
   const lightboxCaption = document.getElementById("lightboxCaption");
   let currentIndex = 0;
 
-  function setImgTransform(x, withTransition) {
-    lightboxImg.style.transition = withTransition
-      ? "transform 0.35s var(--ease), opacity 0.35s var(--ease)"
-      : "none";
-    lightboxImg.style.transform = `translateX(${x}px)`;
+  function itemAt(offset) {
+    const len = visibleItems.length;
+    return visibleItems[(currentIndex + offset + len) % len];
+  }
+
+  function paintSlides() {
+    const prev = itemAt(-1);
+    const cur = itemAt(0);
+    const next = itemAt(1);
+    lightboxImgPrev.src = prev.full;
+    lightboxImgPrev.alt = prev.project;
+    lightboxImg.src = cur.full;
+    lightboxImg.alt = cur.project;
+    lightboxImgNext.src = next.full;
+    lightboxImgNext.alt = next.project;
+    lightboxCaption.textContent = cur.categoryLabel;
+  }
+
+  function resetTrackInstant() {
+    lightboxTrack.classList.add("no-transition");
+    lightboxTrack.classList.remove("is-animating");
+    lightboxTrack.style.transform = "translateX(-33.3334%)";
+    void lightboxTrack.offsetWidth; // wymuś reflow, żeby kolejna zmiana znów się animowała
+    lightboxTrack.classList.remove("no-transition");
   }
 
   function openLightbox(index) {
     currentIndex = index;
-    setImgTransform(0, false);
-    lightboxImg.style.opacity = "1";
-    updateLightbox();
+    paintSlides();
+    resetTrackInstant();
     lightbox.classList.add("is-open");
     lightbox.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
-
-  function updateLightbox() {
-    const item = visibleItems[currentIndex];
-    lightboxImg.src = item.full;
-    lightboxImg.alt = item.project;
-    lightboxCaption.textContent = `${item.project} — ${item.categoryLabel}`;
-  }
-
-  // direction: 1 = następne zdjęcie (wjeżdża z prawej), -1 = poprzednie (wjeżdża z lewej)
-  function goToPhoto(direction) {
-    if (visibleItems.length < 2) return;
-    const outX = direction === 1 ? -window.innerWidth * 0.5 : window.innerWidth * 0.5;
-
-    setImgTransform(outX, true);
-    lightboxImg.style.opacity = "0";
-
-    setTimeout(() => {
-      currentIndex = (currentIndex + direction + visibleItems.length) % visibleItems.length;
-      updateLightbox();
-      setImgTransform(direction === 1 ? 90 : -90, false);
-      requestAnimationFrame(() => {
-        setImgTransform(0, true);
-        lightboxImg.style.opacity = "1";
-      });
-    }, 260);
+    document.body.classList.add("no-scroll");
   }
 
   function closeLightbox() {
     lightbox.classList.remove("is-open");
     lightbox.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
+    document.body.classList.remove("no-scroll");
+  }
+
+  // offset: -1 = poprzednie, +1 = następne — animuje przesunięcie toru,
+  // dopiero PO animacji podmienia obrazki i błyskawicznie (bez transition) resetuje tor do środka.
+  function goTo(offset) {
+    if (visibleItems.length < 2) return;
+    const target = offset < 0 ? 0 : -66.6668;
+    lightboxTrack.classList.add("is-animating");
+    lightboxTrack.style.transform = `translateX(${target}%)`;
+    const onEnd = () => {
+      lightboxTrack.removeEventListener("transitionend", onEnd);
+      currentIndex = (currentIndex + offset + visibleItems.length) % visibleItems.length;
+      paintSlides();
+      resetTrackInstant();
+    };
+    lightboxTrack.addEventListener("transitionend", onEnd, { once: true });
   }
 
   document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
   lightbox.addEventListener("click", (e) => {
     if (e.target === lightbox) closeLightbox();
   });
-  document.getElementById("lightboxPrev").addEventListener("click", () => goToPhoto(-1));
-  document.getElementById("lightboxNext").addEventListener("click", () => goToPhoto(1));
+  document.getElementById("lightboxPrev").addEventListener("click", () => goTo(-1));
+  document.getElementById("lightboxNext").addEventListener("click", () => goTo(1));
   document.addEventListener("keydown", (e) => {
     if (!lightbox.classList.contains("is-open")) return;
     if (e.key === "Escape") closeLightbox();
-    if (e.key === "ArrowLeft") goToPhoto(-1);
-    if (e.key === "ArrowRight") goToPhoto(1);
+    if (e.key === "ArrowLeft") goTo(-1);
+    if (e.key === "ArrowRight") goTo(1);
   });
 
-  /* ---------------- LIGHTBOX: przesuwanie zdjęć palcem (swipe) ---------------- */
-  const SWIPE_THRESHOLD = 70; // px, minimalny dystans by uznać gest za "swipe"
-  let dragStartX = 0;
+  // Przesuwanie palcem: podczas gestu tor jedzie 1:1 z palcem, więc widać już
+  // kawałek kolejnego/poprzedniego zdjęcia — przesunięcie w lewo -> następne,
+  // w prawo -> poprzednie. Po puszczeniu: albo dokończenie zmiany, albo powrót.
+  let dragStartX = null;
   let dragDeltaX = 0;
   let isDragging = false;
-  let activePointerId = null;
+  const SWIPE_THRESHOLD = 60;
 
-  lightboxImg.addEventListener("pointerdown", (e) => {
-    if (visibleItems.length < 2) return;
+  function dragStart(clientX) {
     isDragging = true;
-    activePointerId = e.pointerId;
-    dragStartX = e.clientX;
+    dragStartX = clientX;
     dragDeltaX = 0;
-    lightboxImg.setPointerCapture(e.pointerId);
-    setImgTransform(0, false);
-  });
-
-  lightboxImg.addEventListener("pointermove", (e) => {
-    if (!isDragging || e.pointerId !== activePointerId) return;
-    dragDeltaX = e.clientX - dragStartX;
-    setImgTransform(dragDeltaX, false);
-  });
-
-  function endLightboxDrag(e) {
-    if (!isDragging || (activePointerId !== null && e.pointerId !== activePointerId)) return;
+    lightboxTrack.classList.add("no-transition");
+  }
+  function dragMove(clientX) {
+    if (!isDragging) return;
+    dragDeltaX = clientX - dragStartX;
+    lightboxTrack.style.transform = `translateX(calc(-33.3334% + ${dragDeltaX}px))`;
+  }
+  function dragEnd() {
+    if (!isDragging) return;
     isDragging = false;
-    const delta = dragDeltaX;
-    dragDeltaX = 0;
-
-    if (Math.abs(delta) > SWIPE_THRESHOLD && visibleItems.length > 1) {
-      // delta < 0 -> palec przesunięty w lewo -> następne zdjęcie; delta > 0 -> poprzednie
-      goToPhoto(delta < 0 ? 1 : -1);
+    lightboxTrack.classList.remove("no-transition");
+    if (dragDeltaX <= -SWIPE_THRESHOLD) {
+      goTo(1);
+    } else if (dragDeltaX >= SWIPE_THRESHOLD) {
+      goTo(-1);
     } else {
-      setImgTransform(0, true);
+      lightboxTrack.classList.add("is-animating");
+      lightboxTrack.style.transform = "translateX(-33.3334%)";
     }
+    dragDeltaX = 0;
   }
 
-  lightboxImg.addEventListener("pointerup", endLightboxDrag);
-  lightboxImg.addEventListener("pointercancel", endLightboxDrag);
-  lightboxImg.addEventListener("dragstart", (e) => e.preventDefault());
+  lightboxViewport.addEventListener("touchstart", (e) => dragStart(e.touches[0].clientX), { passive: true });
+  lightboxViewport.addEventListener("touchmove", (e) => dragMove(e.touches[0].clientX), { passive: true });
+  lightboxViewport.addEventListener("touchend", dragEnd);
+  lightboxViewport.addEventListener("touchcancel", dragEnd);
 
   /* ---------------- INSTAGRAM PREVIEW ---------------- */
   const igGrid = document.getElementById("igGrid");
@@ -567,27 +566,6 @@
 
   /* ---------------- SCROLL REVEAL: statyczne sekcje (dynamiczne rejestrują się same przy tworzeniu) ---------------- */
   document
-    .querySelectorAll(".section__head, .about__frame, .about__text, .video__wrap, .video__meta, .contact__form, .contact__side")
+    .querySelectorAll(".section__head, .about__frame, .about__text, .contact__form, .contact__side")
     .forEach(observeReveal);
-
-  /* ---------------- TELEDYSK: odtwarzacz "klik i graj" (lekki, bez auto-ładowania YouTube) ---------------- */
-  const videoPlayer = document.getElementById("videoPlayer");
-  const videoPlayBtn = document.getElementById("videoPlayBtn");
-  if (videoPlayer && videoPlayBtn) {
-    const playVideo = () => {
-      const ytId = videoPlayer.dataset.ytId;
-      const iframe = document.createElement("iframe");
-      iframe.src = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0`;
-      iframe.title = "Odtwarzacz teledysku YouTube";
-      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
-      iframe.allowFullscreen = true;
-      videoPlayer.innerHTML = "";
-      videoPlayer.appendChild(iframe);
-    };
-    videoPlayer.addEventListener("click", playVideo);
-    videoPlayBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      playVideo();
-    });
-  }
 })();

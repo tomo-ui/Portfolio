@@ -283,7 +283,7 @@ a { color: inherit; text-decoration: none; }
   position: fixed;
   inset: 0;
   z-index: 190;
-  background: rgba(13, 12, 11, 0.78);
+  background: rgba(13, 12, 11, 0.48);
   -webkit-backdrop-filter: blur(22px) saturate(170%);
   backdrop-filter: blur(22px) saturate(170%);
   box-shadow:
@@ -1072,9 +1072,43 @@ a { color: inherit; text-decoration: none; }
   padding: 40px;
 }
 .lightbox.is-open { opacity: 1; pointer-events: all; }
-.lightbox figure { margin: 0; max-width: 1100px; max-height: 88vh; }
-.lightbox img { max-height: 78vh; width: auto; margin: 0 auto; border: 1px solid var(--line); }
-.lightbox figcaption {
+
+.lightbox__viewport {
+  width: 100%;
+  max-width: 1100px;
+  max-height: 78vh;
+  overflow: hidden;
+  position: relative;
+}
+.lightbox__track {
+  display: flex;
+  width: 300%;
+  height: 100%;
+  transform: translateX(-33.3334%);
+}
+.lightbox__track.no-transition { transition: none !important; }
+.lightbox__track.is-animating { transition: transform 0.4s var(--ease); }
+.lightbox__slide {
+  width: 33.3334%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 6px;
+}
+.lightbox img {
+  max-height: 78vh;
+  max-width: 100%;
+  width: auto;
+  margin: 0 auto;
+  border: 1px solid var(--line);
+  touch-action: pan-y;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
+.lightbox__caption {
   text-align: center;
   margin-top: 16px;
   font-family: var(--font-mono);
@@ -1083,8 +1117,19 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
+.lightbox__swipe-hint {
+  display: none;
+  margin: 10px 0 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  opacity: 0.8;
+}
 .lightbox__close, .lightbox__nav {
   position: absolute;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1095,12 +1140,16 @@ a { color: inherit; text-decoration: none; }
   border-radius: 100px;
   -webkit-backdrop-filter: blur(14px) saturate(150%);
   backdrop-filter: blur(14px) saturate(150%);
-  backdrop-filter: blur(14px) saturate(150%) url(#liquid-glass-distortion);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.26),
     inset 0 -1px 0 rgba(255, 255, 255, 0.04),
     0 6px 18px rgba(0, 0, 0, 0.35);
   transition: border-color 0.25s var(--ease), color 0.25s var(--ease), background 0.25s var(--ease), transform 0.2s var(--ease);
+}
+@supports (backdrop-filter: blur(1px)) and (not (-webkit-touch-callout: none)) {
+  .lightbox__close, .lightbox__nav {
+    backdrop-filter: blur(14px) saturate(150%) url(#liquid-glass-distortion);
+  }
 }
 .lightbox__close { top: 26px; right: 26px; width: 44px; height: 44px; font-size: 16px; }
 .lightbox__nav { top: 50%; transform: translateY(-50%); width: 52px; height: 52px; font-size: 26px; }
@@ -1114,14 +1163,16 @@ a { color: inherit; text-decoration: none; }
 .lightbox__nav:active { transform: translateY(-50%) scale(0.94); }
 .lightbox__close:active { transform: scale(0.94); }
 
-/* Zdjęcie w lightboxie — przeciąganie palcem/myszką między zdjęciami */
-.lightbox img {
-  touch-action: pan-y;
-  cursor: grab;
-  -webkit-user-drag: none;
-  user-select: none;
+/* Urządzenia dotykowe: strzałki znikają na rzecz przesuwania palcem,
+   a przycisk zamknięcia dostaje mocniejsze, zawsze czytelne tło. */
+@media (hover: none) {
+  .lightbox__nav { display: none; }
+  .lightbox__swipe-hint { display: block; }
+  .lightbox__close {
+    background: rgba(13, 12, 11, 0.55);
+    border-color: rgba(255, 255, 255, 0.22);
+  }
 }
-.lightbox img:active { cursor: grabbing; }
 
 /* =========================================================================
    RESPONSIVE

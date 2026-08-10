@@ -306,10 +306,15 @@
   <button class="lightbox__close" id="lightboxClose" aria-label="Zamknij podgląd">✕</button>
   <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Poprzednie zdjęcie">‹</button>
   <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Następne zdjęcie">›</button>
-  <figure>
-    <img src="" alt="" id="lightboxImg">
-    <figcaption id="lightboxCaption"></figcaption>
-  </figure>
+  <div class="lightbox__viewport" id="lightboxViewport">
+    <div class="lightbox__track" id="lightboxTrack">
+      <div class="lightbox__slide"><img alt="" id="lightboxImgPrev"></div>
+      <div class="lightbox__slide"><img alt="" id="lightboxImg"></div>
+      <div class="lightbox__slide"><img alt="" id="lightboxImgNext"></div>
+    </div>
+  </div>
+  <figcaption id="lightboxCaption" class="lightbox__caption"></figcaption>
+  <p class="lightbox__swipe-hint" id="lightboxSwipeHint" aria-hidden="true">← przesuń, aby zobaczyć więcej →</p>
 </div>
 
 <script src="js/category-labels.js"></script>
